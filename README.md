@@ -4,8 +4,8 @@ Face detection (YOLO), emotion and gender classification (CNN).
 
 ## Requirements
 
-Anaconda3
-opencv-python ( installed with pip for anaconda python interpreter )
+Anaconda3 __
+opencv-python ( installed with pip for anaconda python interpreter using command 'pip install opencv-python )
 
 ## Weights for YOLO dnn
 
