@@ -6,6 +6,7 @@ class FaceDetector:
         self.scale = 0.00392
         self.face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
         self.net = cv2.dnn.readNet('new_face_det.weights','new_face_det.cfg')
+        self.boxes = []
 
     def drawFacesImg(self,image):
 
@@ -60,6 +61,7 @@ class FaceDetector:
                     boxes.append([x, y, w, h])
 
         #print(boxes)
+        self.boxes = boxes
 
         indices = cv2.dnn.NMSBoxes(boxes, confidences, conf_threshold, nms_threshold)
         # go through the detections remaining
