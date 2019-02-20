@@ -8,7 +8,7 @@ class EmotionClassifier:
     def __init__(self):
 
         # self.model = load_model('models/_mini_XCEPTION.01-0.43.hdf5', compile=False)
-        self.model = load_model('models2/_mini_XCEPTION.102-0.66.hdf5', compile=False)
+        self.model = load_model('models/_mini_XCEPTION.102-0.66.hdf5', compile=False)
 
         self.emotions = ["angry", "disgust", "scared", "happy", "sad", "surprised", "neutral"]
 
@@ -27,7 +27,8 @@ class EmotionClassifier:
                 # the ROI for classification via the CNN
                 roi = gray[round(fY):round(fY + fH), round(fX):round(fX + fW)]
                 try:
-                    roi = cv2.resize(roi, (48, 48))
+                    roi = cv2.resize(roi, (64, 64))
+
                 except cv2.error:
                     continue
 
