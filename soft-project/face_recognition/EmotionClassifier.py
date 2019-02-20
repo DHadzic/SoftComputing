@@ -37,7 +37,6 @@ class EmotionClassifier:
                 roi = np.expand_dims(roi, axis=0)
                 # print(roi.shape)
                 preds = self.model.predict(roi)
-                print(preds)
                 confidence = preds.max() * 100
                 confidences.append(round(confidence))
                 # emotion_probability = np.max(preds)

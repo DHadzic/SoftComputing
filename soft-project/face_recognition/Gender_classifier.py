@@ -56,7 +56,6 @@ class GenderClassifier:
                 roi = np.expand_dims(roi, axis=0)
 
                 preds = self.model.predict(roi)
-                print(preds)
                 confidence = preds.max()*100
                 confidences.append(round(confidence))
                 label = self.gender[preds.argmax()]
