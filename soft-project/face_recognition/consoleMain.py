@@ -1,6 +1,8 @@
 import cv2
 import numpy
 from face_recognition.FaceDetector import FaceDetector
+from face_recognition.EmotionClassifier import EmotionClassifier
+from face_recognition.Gender_classifier import GenderClassifier
 
 def drawFacesImg(image):
 
@@ -81,14 +83,22 @@ def get_output_layers(net):
 
 def draw_bounding_box(img, class_id, confidence, x, y, x_plus_w, y_plus_h):
 
-    label = str(classes[class_id])
+    # label = str(classes[class_id])
 
     color = COLORS[class_id]
 
     cv2.rectangle(img, (x,y), (x_plus_w,y_plus_h), color, 2)
 
-    cv2.putText(img, label, (x-10,y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+    # cv2.putText(img, label, (x-10,y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 
+
+
+
+
+face_detection = cv2.CascadeClassifier()
+
+ec = EmotionClassifier()
+go = GenderClassifier()
 
 scale = 0.00392
 cap = cv2.VideoCapture(0)
@@ -100,16 +110,20 @@ with open('classes.txt', 'r') as f:
 COLORS = numpy.random.uniform(0, 255, size=(len(classes), 3))
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 fd = FaceDetector()
-while True :
+while True:
     ret,frame = cap.read()
-    #frame = cv2.resize(frame,(500,400))
 
+    # img = cv2.imread('Two_faces.png')
     frame = fd.drawFacesImg(frame)
 
-    cv2.imshow('Face detection', frame)
+    frame = fd.drawFacesImg(frame)
+    frame = ec.classify_emotion(frame,fd.boxes)
+    frame2 = go.classify_gender(frame,fd.boxes)
+    cv2.imshow('Face with emotion', frame2)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
+
 
 #img = cv2.imread('Screenshot_27.png')
 #img = drawFacesImg(img)
@@ -117,5 +131,3 @@ while True :
 cv2.waitKey()
 cap.release()
 cv2.destroyAllWindows()
-
-
