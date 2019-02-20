@@ -11,6 +11,8 @@ class GenderClassifier:
         # self.model = load_model('C:/Users/Korisnik/Desktop/SoftComputing-master/soft-project/face_recognition/models/pre-trained/gender_mini_XCEPTION.21-0.95.hdf5', compile=False)
         # self.model = load_model('models/pre-trained/simple_CNN.81-0.96.hdf5', compile=False)
         self.model = load_model('models/gender_mini_XCEPTION.02-0.84.hdf5', compile=False)
+
+
         # self.model = load_model('C:/Users/Korisnik/Desktop/SoftComputing-master/soft-project/model3/gender_detection.model', compile=False)
 
         self.gender = ["woman", "man"]
@@ -27,6 +29,7 @@ class GenderClassifier:
 
         if len(boxes) > 0:
             labels = []
+            confidences =[]
             xs = []
             ys = []
             for i in range(0, len(boxes)):
@@ -52,19 +55,14 @@ class GenderClassifier:
                 roi = img_to_array(roi)
                 roi = np.expand_dims(roi, axis=0)
 
-                preds = self.model.predict(roi)[0]
+                preds = self.model.predict(roi)
+                print(preds)
+                confidence = preds.max()*100
+                confidences.append(round(confidence))
                 label = self.gender[preds.argmax()]
                 labels.append(label)
 
-            # return self.add_gender_text(image,labels,xs,ys)
-            return labels
+            return labels, confidences
         else:
-            return []
+            return [], []
 
-    def add_gender_text(self, image, labels, xs, ys):
-
-        for i in range(0, len(labels)):
-            cv2.putText(image, labels[i], (int(xs[i] + 55), int(ys[i]) - 10),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
-
-        return image

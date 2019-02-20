@@ -17,6 +17,7 @@ class EmotionClassifier:
 
         if len(boxes) > 0:
             labels = []
+            confidences = []
             xs = []
             ys = []
             for i in range(0, len(boxes)):
@@ -35,20 +36,15 @@ class EmotionClassifier:
                 roi = img_to_array(roi)
                 roi = np.expand_dims(roi, axis=0)
                 # print(roi.shape)
-                preds = self.model.predict(roi)[0]
+                preds = self.model.predict(roi)
+                print(preds)
+                confidence = preds.max() * 100
+                confidences.append(round(confidence))
                 # emotion_probability = np.max(preds)
                 label = self.emotions[preds.argmax()]
                 labels.append(label)
 
-            # return self.add_emotion_text(image,labels,xs,ys)
-            return labels
+            return labels, confidences
         else:
-            return []
+            return [], []
 
-    def add_emotion_text(self,image,labels,xs,ys):
-
-        for i in range(0, len(labels)):
-            cv2.putText(image,labels[i],(int(xs[i]), int(ys[i]) - 10),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
-
-        return image

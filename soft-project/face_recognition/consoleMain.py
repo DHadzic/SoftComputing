@@ -5,7 +5,11 @@ from EmotionClassifier import EmotionClassifier
 from Gender_classifier import GenderClassifier
 import argparse
 
-def edit_frame(frame, emotions, genders, boxes):
+
+def to_str(var):
+    return str(list(numpy.reshape(numpy.asarray(var), (1, numpy.size(var)))[0]))[1:-1]
+
+def edit_frame(frame, emotions, genders, emotion_confs, gender_confs, boxes):
     for i in range(0, len(boxes)):
         x, y, x_plus_w, y_plus_h = round(boxes[i][0]), round(boxes[i][1]), round(boxes[i][0] + boxes[i][2]), round(boxes[i][1] + boxes[i][3])
 
@@ -13,8 +17,14 @@ def edit_frame(frame, emotions, genders, boxes):
         if len(emotions) > i:
             cv2.putText(frame, emotions[i], (int(x), int(y_plus_h) + 10),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
+            conf = to_str(emotion_confs[i]) + "%"
+            cv2.putText(frame, conf, (int(x), int(y_plus_h) + 25),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
         if len(genders) > i:
             cv2.putText(frame, genders[i], (int(x) + 55, int(y_plus_h) + 10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
+            conf = to_str(gender_confs[i]) + "%"
+            cv2.putText(frame, conf, (int(x) + 55, int(y_plus_h) + 25),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
 
     return frame
@@ -43,9 +53,9 @@ if (args.type == 0):
         ret, frame = cap.read()
         fd.drawFacesImg(frame)
 
-        emotions = ec.classify_emotion(frame,fd.boxes)
-        genders = go.classify_gender(frame,fd.boxes)
-        frame = edit_frame(frame, emotions, genders, fd.boxes)
+        emotions, emotion_confs = ec.classify_emotion(frame,fd.boxes)
+        genders, gender_confs = go.classify_gender(frame,fd.boxes)
+        frame = edit_frame(frame, emotions, genders, emotion_confs, gender_confs, fd.boxes)
         cv2.imshow('Face with emotion', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
@@ -57,9 +67,9 @@ elif (args.type == 1):
         read_bool, frame = cap.read()
         # frame = cv2.flip(frame, 1)
         fd.drawFacesImg(frame)
-        emotions = ec.classify_emotion(frame,fd.boxes)
-        genders = go.classify_gender(frame,fd.boxes)
-        frame = edit_frame(frame, emotions, genders, fd.boxes)
+        emotions, emotion_confs = ec.classify_emotion(frame, fd.boxes)
+        genders, gender_confs = go.classify_gender(frame, fd.boxes)
+        frame = edit_frame(frame, emotions, genders, emotion_confs, gender_confs, fd.boxes)
         cv2.imshow('Face with emotion', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
@@ -70,9 +80,9 @@ elif (args.type == 2):
     frame = cv2.imread(name)
 
     fd.drawFacesImg(frame)
-    emotions = ec.classify_emotion(frame, fd.boxes)
-    genders = go.classify_gender(frame, fd.boxes)
-    frame = edit_frame(frame, emotions, genders, fd.boxes)
+    emotions, emotion_confs = ec.classify_emotion(frame, fd.boxes)
+    genders, gender_confs = go.classify_gender(frame, fd.boxes)
+    frame = edit_frame(frame, emotions, genders, emotion_confs, gender_confs, fd.boxes)
     cv2.imshow('Face with emotion', frame)
 
 else:
