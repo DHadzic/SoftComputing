@@ -9,8 +9,8 @@ class GenderClassifier:
     def __init__(self):
 
         # self.model = load_model('C:/Users/Korisnik/Desktop/SoftComputing-master/soft-project/face_recognition/models/oarriaga/gender_mini_XCEPTION.21-0.95.hdf5', compile=False)
-        self.model = load_model('models/oarriaga/simple_CNN.81-0.96.hdf5', compile=False)
-        self.model = load_model('pre-trained/gender_mini_XCEPTION.21-0.95.hdf.02-0.84.hdf5', compile=False)
+        # self.model = load_model('models/pre-trained/simple_CNN.81-0.96.hdf5', compile=False)
+        self.model = load_model('pre-trained/gender_mini_XCEPTION.02-0.84.hdf5', compile=False)
         # self.model = load_model('C:/Users/Korisnik/Desktop/SoftComputing-master/soft-project/model3/gender_detection.model', compile=False)
 
         self.gender = ["woman", "man"]
