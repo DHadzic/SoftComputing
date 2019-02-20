@@ -6,6 +6,7 @@ from PIL import Image,ImageTk
 from FaceDetector import FaceDetector
 from EmotionClassifier import EmotionClassifier
 from Gender_classifier import GenderClassifier
+from consoleMain import edit_frame
 
 class MyWindow:
     def __init__(self):
@@ -55,8 +56,11 @@ class MyWindow:
                         break
                     _,frame = self.cap.read()
                     frame = cv2.flip(frame, 1)
+                    self.faceDetector.drawFacesImg(frame)
 
-                    frame = self.faceDetector.drawFacesImg(frame)
+                    emotions, emotion_confs = self.ec.classify_emotion(frame,fd.boxes)
+                    genders, gender_confs = self.go.classify_gender(frame,fd.boxes)
+                    frame = edit_frame(frame, emotions, genders, emotion_confs, gender_confs, fd.boxes)
 
                     cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
                     img = Image.fromarray(cv2image)
@@ -73,7 +77,11 @@ class MyWindow:
                         break
                     frame = cv2.flip(frame, 1)
 
-                    frame = self.faceDetector.drawFacesImg(frame)
+                    self.faceDetector.drawFacesImg(frame)
+
+                    emotions, emotion_confs = self.ec.classify_emotion(frame,fd.boxes)
+                    genders, gender_confs = self.go.classify_gender(frame,fd.boxes)
+                    frame = edit_frame(frame, emotions, genders, emotion_confs, gender_confs, fd.boxes)
 
                     cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
                     img = Image.fromarray(cv2image)
@@ -84,7 +92,11 @@ class MyWindow:
                 frame = cv2.imread(self.file_path)
                 if frame is None:
                     break
-                frame = self.faceDetector.drawFacesImg(frame)
+                self.faceDetector.drawFacesImg(frame)
+
+                emotions, emotion_confs = self.ec.classify_emotion(frame,fd.boxes)
+                genders, gender_confs = self.go.classify_gender(frame,fd.boxes)
+                frame = edit_frame(frame, emotions, genders, emotion_confs, gender_confs, fd.boxes)
                 cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
                 img = Image.fromarray(cv2image)
                 imgtk = ImageTk.PhotoImage(image=img)
