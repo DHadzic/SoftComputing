@@ -28,6 +28,7 @@ class EmotionClassifier:
                 roi = gray[round(fY):round(fY + fH), round(fX):round(fX + fW)]
                 try:
                     roi = cv2.resize(roi, (64, 64))
+
                 except cv2.error:
                     continue
 
