@@ -8,7 +8,6 @@ class GenderClassifier:
 
     def __init__(self):
 
-        # self.model = load_model('C:/Users/Korisnik/Desktop/SoftComputing-master/soft-project/face_recognition/models/pre-trained/gender_mini_XCEPTION.21-0.95.hdf5', compile=False)
         # self.model = load_model('models/pre-trained/simple_CNN.81-0.96.hdf5', compile=False)
         self.model = load_model('models/gender_mini_XCEPTION.02-0.84.hdf5', compile=False)
 
