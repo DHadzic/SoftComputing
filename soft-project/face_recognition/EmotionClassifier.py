@@ -8,7 +8,7 @@ class EmotionClassifier:
     def __init__(self):
 
         # self.model = load_model('models/_mini_XCEPTION.01-0.43.hdf5', compile=False)
-        self.model = load_model('models/_mini_XCEPTION.102-0.66.hdf5', compile=False)
+        self.model = load_model('models/pre-trained/fer2013_mini_XCEPTION.99-0.65.hdf5', compile=False)
 
         self.emotions = ["angry", "disgust", "scared", "happy", "sad", "surprised", "neutral"]
 
@@ -28,7 +28,6 @@ class EmotionClassifier:
                 roi = gray[round(fY):round(fY + fH), round(fX):round(fX + fW)]
                 try:
                     roi = cv2.resize(roi, (64, 64))
-
                 except cv2.error:
                     continue
 
@@ -41,10 +40,10 @@ class EmotionClassifier:
                 label = self.emotions[preds.argmax()]
                 labels.append(label)
 
-            return self.add_emotion_text(image,labels,xs,ys)
-
+            # return self.add_emotion_text(image,labels,xs,ys)
+            return labels
         else:
-            return image
+            return []
 
     def add_emotion_text(self,image,labels,xs,ys):
 

@@ -8,10 +8,9 @@ class GenderClassifier:
 
     def __init__(self):
 
-        # self.model = load_model('C:/Users/Korisnik/Desktop/SoftComputing-master/soft-project/face_recognition/models/oarriaga/gender_mini_XCEPTION.21-0.95.hdf5', compile=False)
+        # self.model = load_model('C:/Users/Korisnik/Desktop/SoftComputing-master/soft-project/face_recognition/models/pre-trained/gender_mini_XCEPTION.21-0.95.hdf5', compile=False)
         # self.model = load_model('models/pre-trained/simple_CNN.81-0.96.hdf5', compile=False)
         self.model = load_model('models/gender_mini_XCEPTION.02-0.84.hdf5', compile=False)
-
         # self.model = load_model('C:/Users/Korisnik/Desktop/SoftComputing-master/soft-project/model3/gender_detection.model', compile=False)
 
         self.gender = ["woman", "man"]
@@ -39,7 +38,6 @@ class GenderClassifier:
 
                 # Extract the ROI of the face from the grayscale image, resize it to a fixed 28x28 pixels, and then prepare
                 # the ROI for classification via the CNN
-
                 roi = gray[round(y):round(y2), round(x):round(x2)]
 
                 # roi = np.copy(image[round(y):round(y2), round(x):round(x2)])
@@ -47,7 +45,6 @@ class GenderClassifier:
                 if len(roi) == 0: roi = gray[round(fY):round(fY + fH), round(fX):round(fX + fW)]
                 try:
                     roi = cv2.resize(roi, (64, 64))
-
                 except cv2.error:
                     continue
 
@@ -59,10 +56,10 @@ class GenderClassifier:
                 label = self.gender[preds.argmax()]
                 labels.append(label)
 
-            return self.add_gender_text(image,labels,xs,ys)
-
+            # return self.add_gender_text(image,labels,xs,ys)
+            return labels
         else:
-            return image
+            return []
 
     def add_gender_text(self, image, labels, xs, ys):
 
