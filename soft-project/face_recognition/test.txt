@@ -1,0 +1,6 @@
+data/obj/img15.jpg
+data/obj/img21.jpg
+data/obj/img28.jpg
+data/obj/img34.jpg
+data/obj/img40.jpg
+data/obj/img5.jpg
