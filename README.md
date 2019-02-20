@@ -34,4 +34,8 @@ For running the app through console:
     ```
     python consoleMain.py -t 2
     ```  
-    For video and image input, additional console input will be required. The user will have to insert path to video/image he would like to process. 
+    For video and image input, additional console input will be required. The user will have to insert path to video/image he would like to process.   
+    However, if user wants to open GUI, the following command will do that:  
+    ```
+    python MyWindow.py
+    ``` 
