@@ -29,66 +29,67 @@ def edit_frame(frame, emotions, genders, emotion_confs, gender_confs, boxes):
 
     return frame
 
-ap = argparse.ArgumentParser()
-ap.add_argument("-t", "--type", required=True,type = int)
-args = ap.parse_args()
+if __name__=="__main__":
+    ap = argparse.ArgumentParser()
+    ap.add_argument("-t", "--type", required=True,type = int)
+    args = ap.parse_args()
 
-face_detection = cv2.CascadeClassifier()
-ec = EmotionClassifier()
-go = GenderClassifier()
-cap = cv2.VideoCapture(0)
-fd = FaceDetector()
-scale = 0.00392
+    face_detection = cv2.CascadeClassifier()
+    ec = EmotionClassifier()
+    go = GenderClassifier()
+    cap = cv2.VideoCapture(0)
+    fd = FaceDetector()
+    scale = 0.00392
 
-net = cv2.dnn.readNet('new_face_det.weights','new_face_det.cfg')
+    net = cv2.dnn.readNet('new_face_det.weights','new_face_det.cfg')
 
-with open('classes.txt', 'r') as f:
-    classes = [line.strip() for line in f.readlines()]
+    with open('classes.txt', 'r') as f:
+        classes = [line.strip() for line in f.readlines()]
 
-COLORS = numpy.random.uniform(0, 255, size=(len(classes), 3))
-face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+    COLORS = numpy.random.uniform(0, 255, size=(len(classes), 3))
+    face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
-if (args.type == 0):
-    while True:
-        ret, frame = cap.read()
-        fd.drawFacesImg(frame)
+    if (args.type == 0):
+        while True:
+            ret, frame = cap.read()
+            fd.drawFacesImg(frame)
 
-        emotions, emotion_confs = ec.classify_emotion(frame,fd.boxes)
-        genders, gender_confs = go.classify_gender(frame,fd.boxes)
-        frame = edit_frame(frame, emotions, genders, emotion_confs, gender_confs, fd.boxes)
-        cv2.imshow('Face with emotion', frame)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+            emotions, emotion_confs = ec.classify_emotion(frame,fd.boxes)
+            genders, gender_confs = go.classify_gender(frame,fd.boxes)
+            frame = edit_frame(frame, emotions, genders, emotion_confs, gender_confs, fd.boxes)
+            cv2.imshow('Face with emotion', frame)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
 
-elif (args.type == 1):
-    name = input("Name of video: ")
-    cap = cv2.VideoCapture(name)
-    while True:
-        read_bool, frame = cap.read()
-        # frame = cv2.flip(frame, 1)
+    elif (args.type == 1):
+        name = input("Name of video: ")
+        cap = cv2.VideoCapture(name)
+        while True:
+            read_bool, frame = cap.read()
+            # frame = cv2.flip(frame, 1)
+            fd.drawFacesImg(frame)
+            emotions, emotion_confs = ec.classify_emotion(frame, fd.boxes)
+            genders, gender_confs = go.classify_gender(frame, fd.boxes)
+            frame = edit_frame(frame, emotions, genders, emotion_confs, gender_confs, fd.boxes)
+            cv2.imshow('Face with emotion', frame)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+
+    elif (args.type == 2):
+        name = input("Name of image: ")
+
+        frame = cv2.imread(name)
+
         fd.drawFacesImg(frame)
         emotions, emotion_confs = ec.classify_emotion(frame, fd.boxes)
         genders, gender_confs = go.classify_gender(frame, fd.boxes)
         frame = edit_frame(frame, emotions, genders, emotion_confs, gender_confs, fd.boxes)
         cv2.imshow('Face with emotion', frame)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
 
-elif (args.type == 2):
-    name = input("Name of image: ")
-
-    frame = cv2.imread(name)
-
-    fd.drawFacesImg(frame)
-    emotions, emotion_confs = ec.classify_emotion(frame, fd.boxes)
-    genders, gender_confs = go.classify_gender(frame, fd.boxes)
-    frame = edit_frame(frame, emotions, genders, emotion_confs, gender_confs, fd.boxes)
-    cv2.imshow('Face with emotion', frame)
-
-else:
-    print("Wrong input")
+    else:
+        print("Wrong input")
 
 
-cv2.waitKey()
-cap.release()
-cv2.destroyAllWindows()
+    cv2.waitKey()
+    cap.release()
+    cv2.destroyAllWindows()
